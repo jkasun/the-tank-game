@@ -1,21 +1,10 @@
-// Ported from Stefan Gustavson's java implementation
-// http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
-// Read Stefan's excellent paper for details on how this code works.
-//
-// Sean McCullough banksean@gmail.com
-
-/**
- * You can pass in a random number generator object if you like.
- * It is assumed to have a random() method.
- */
-var SimplexNoise = function (r) {
-    if (r == undefined) r = Math;
+var SimplexNoise = function () {
     this.grad3 = [[1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
     [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
     [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]];
     this.p = [];
     for (var i = 0; i < 256; i++) {
-        this.p[i] = Math.floor(r.random() * 256);
+        this.p[i] = Math.floor(Math.random() * 256);
     }
     // To remove the need for index wrapping, double the permutation table length 
     this.perm = [];

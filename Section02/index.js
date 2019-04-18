@@ -1,19 +1,18 @@
-const pn = new SimplexNoise();
-
 const width = 100;
 const height = 100;
 
 const scaler = 0.1;
 
-var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
+const c = document.getElementById("canvas");
+const ctx = c.getContext("2d");
 
-// const c1 = document.getElementById('canvas1');
-// const ctx1 = c1.getContext("2d");
+const boxSize = 25;
+const drawX = 800 / boxSize;
+const drawY = 800 / boxSize;
 
-const boxSize = 8;
+const arena = generateArena(width, height);
 
-function drawRect(x, y, type, ctx) {
+const drawRect = (x, y, type, ctx) => {
     if (type === 1) {
         ctx.fillStyle = 'white';
         ctx.fillRect(x * boxSize, y * boxSize, boxSize, boxSize);
@@ -23,35 +22,66 @@ function drawRect(x, y, type, ctx) {
     }
 }
 
-function drawPlayer() {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(80, 80, 2, boxSize);
-
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(82, 80, boxSize - 2, boxSize);
+const playerPosition = {
+    x: 0,
+    y: 0
 }
 
+const drawPlayer = () => {
+    ctx.fillStyle = 'red';
 
-for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-        const c = pn.noise(x * scaler, y * scaler);
+    ctx.fillRect(
+        13 * boxSize,
+        13 * boxSize,
+        boxSize,
+        boxSize
+    );
+}
 
-        if (c < 0.445) {
-            // line += ' ';
-            drawRect(x, y, 1, ctx);
-        } else {
-            // line += '#';
-            drawRect(x, y, undefined, ctx)
+const drawPOV = () => {
+    offsetX = playerPosition.x;
+    offsetY = playerPosition.y;
+
+    for (let x = 0 + offsetX; x < drawX + offsetX; x++) {
+        for (let y = 0 + offsetY; y < drawY + offsetY; y++) {
+            // if out of area
+            if (arena[x] === undefined || arena[x][y] === undefined) {
+                drawRect(x - offsetX, y - offsetY, 0, ctx);
+                return;
+            }
+
+            if (arena[x][y] === 0) {
+                drawRect(x - offsetX, y - offsetY, 0, ctx);
+            } else {
+                drawRect(x - offsetX, y - offsetY, 1, ctx);
+            }
         }
-
-        // const r = Math.random();
-
-        // if (r > 0.2) {
-        //     drawRect(x, y, 1, ctx1);
-        // } else {
-        //     drawRect(x, y, undefined, ctx1);
-        // }
     }
 }
 
-drawPlayer();
+const moveLeft = () => {
+    playerPosition.x--;
+    drawPOV();
+    drawPlayer();
+}
+
+const moveRight = () => {
+    playerPosition.x++;
+    drawPOV();
+    drawPlayer();
+}
+
+const moveUp = () => {
+    playerPosition.y--;
+    drawPOV();
+    drawPlayer();
+}
+
+const moveDown = () => {
+    playerPosition.y++;
+    drawPOV();
+    drawPlayer();
+}
+
+drawPOV(0, 0);
+
