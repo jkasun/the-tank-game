@@ -61,7 +61,7 @@ export class Arena extends GameObject {
     }
 
     private drawBrick(x, y) {
-        this.game.drawImage(brick, x, y);
+        this.game.drawImage(this, brick, x, y);
     }
 
     render() {
@@ -78,5 +78,9 @@ export class Arena extends GameObject {
                 }
             }
         }
+    }
+
+    onCollision(x, y) {
+        this.arena[x][y] = 1;
     }
 }

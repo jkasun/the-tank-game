@@ -44,6 +44,7 @@ export class Player extends GameObject {
 
     render() {
         this.game.drawImage(
+            this,
             this.tankImage,
             this.positionX,
             this.positionY,
@@ -54,29 +55,49 @@ export class Player extends GameObject {
             bullet.render();
         }
     }
-
+    
     moveUp() {
         this.direction = DIRECTION.UP;
-        this.positionY--;
         this.tankImage = tankUp;
+
+        if (this.game.hasCollision(this.positionX, this.positionY - 1)) {
+            return;
+        }
+
+        this.positionY--;
     }
 
     moveDown() {
         this.direction = DIRECTION.DOWN;
-        this.positionY++;
         this.tankImage = tankDown;
+
+        if (this.game.hasCollision(this.positionX, this.positionY + 1)) {
+            return;
+        }
+
+        this.positionY++;
     }
 
     moveRight() {
         this.direction = DIRECTION.RIGHT;
-        this.positionX++;
         this.tankImage = tankRight;
+
+        if (this.game.hasCollision(this.positionX + 1, this.positionY)) {
+            return;
+        }
+
+        this.positionX++;
     }
 
     moveLeft() {
         this.direction = DIRECTION.LEFT;
-        this.positionX--;
         this.tankImage = tankLeft;
+
+        if (this.game.hasCollision(this.positionX - 1, this.positionY)) {
+            return;
+        }
+
+        this.positionX--;
     }
 
     getX() {

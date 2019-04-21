@@ -1,6 +1,7 @@
 import { GameObject } from "../core/game-object";
 import { DIRECTION } from "../core/direction";
 import { Game } from "../core/game";
+import { Player } from "./player";
 
 const bulletRight = new Image();
 bulletRight.src = './img/bullet/bullet-right.png';
@@ -60,8 +61,18 @@ export class Bullet extends GameObject {
         }, 1000 / this.velocity);
     }
 
+    onCollision(x, y, gameObject) {
+        if (gameObject instanceof Player) {
+            return;
+        }
+
+
+        this.game.removeGameObject(this);
+    }
+
     render() {
         this.game.drawImage(
+            this,
             this.bulletImage,
             this.x,
             this.y

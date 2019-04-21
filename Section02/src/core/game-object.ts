@@ -12,4 +12,8 @@ export abstract class GameObject {
     }
 
     abstract render();
+    
+    onCollision(x, y, gameObject: GameObject) {
+
+    }
 }
