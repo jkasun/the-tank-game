@@ -14,7 +14,6 @@ export class Arena extends GameObject {
 
     constructor(
         game: Game,
-        private player: Player
     ) {
         super(game);
 
