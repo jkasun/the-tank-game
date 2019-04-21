@@ -1,40 +1,39 @@
 import { Arena } from './objects/arena';
 import { Player } from './objects/player';
+import { Game } from './core/game';
 
 const c: any = document.getElementById("canvas");
 const ctx: CanvasRenderingContext2D = c.getContext("2d");
 
-const player = new Player(ctx);
-const arena = new Arena(ctx, player);
+const tankGame = new Game(ctx, 100, 100);
 
-const drawGame = () => {
-    arena.render();
-    player.render();
-}
+const player = new Player(tankGame);
+const arena = new Arena(tankGame, player);
 
-setTimeout(() => {
-    drawGame();
-}, 500);
+tankGame.addGameObject(arena);
+tankGame.addGameObject(player);
+
+tankGame.start();
 
 document.onkeyup = (event) => {
     if (event.key === 'w') {
         player.moveUp();
-        drawGame();
     }
 
     if (event.key === 's') {
         player.moveDown();
-        drawGame();
     }
 
     if (event.key === 'd') {
         player.moveRight();
-        drawGame();
     }
 
     if (event.key === 'a') {
         player.moveLeft();
-        drawGame();
+    }
+
+    if (event.key === 'l') {
+        player.fire();
     }
 }
 

@@ -1,55 +1,80 @@
 import { GameObject } from "../core/game-object";
+import { Bullet } from "./bullet";
+import { Game } from "../core/game";
+import { DIRECTION } from "../core/direction";
 
-const boxSize = 25;
+const tankUp = new Image();
+tankUp.src = './img/tank/tank-up.png';
 
-const tankUp = new Image(boxSize, boxSize);
-tankUp.src = './img/tank-up.png';
+const tankDown = new Image();
+tankDown.src = './img/tank/tank-down.png';
 
-const tankDown = new Image(boxSize, boxSize);
-tankDown.src = './img/tank-down.png';
+const tankRight = new Image();
+tankRight.src = './img/tank/tank-right.png';
 
-const tankRight = new Image(boxSize, boxSize);
-tankRight.src = './img/tank-right.png';
-
-const tankLeft = new Image(boxSize, boxSize);
-tankLeft.src = './img/tank-left.png';
+const tankLeft = new Image();
+tankLeft.src = './img/tank/tank-left.png';
 
 export class Player extends GameObject {
-    private positionX: number = 0;
-    private positionY: number = 0;
+    private positionX: number;
+    private positionY: number;
     private tankImage;
 
-    constructor(ctx: CanvasRenderingContext2D) {
-        super(ctx);
+    private bullets: Bullet[] = [];
+    private direction: DIRECTION = DIRECTION.RIGHT;
+
+    constructor(game: Game) {
+        super(game);
         this.tankImage = tankRight;
+
+        this.positionX = game.gridSize / 2;
+        this.positionY = game.gridSize / 2;
+
+        game.setCameraFunction(() => {
+            const pos = {
+                x1: this.getX() - 15,
+                x2: this.getX() + 15,
+                y1: this.getY() - 15,
+                y2: this.getY() + 15
+            }
+
+            return pos;
+        });
     }
 
     render() {
-        this.ctx.drawImage(
+        this.game.drawImage(
             this.tankImage,
-            13 * boxSize,
-            13 * boxSize,
-            boxSize,
-            boxSize
+            this.positionX,
+            this.positionY,
         );
+
+        // rendering bullets 
+        for (let bullet of this.bullets) {
+            bullet.render();
+        }
     }
 
     moveUp() {
+        this.direction = DIRECTION.UP;
         this.positionY--;
         this.tankImage = tankUp;
     }
 
     moveDown() {
+        this.direction = DIRECTION.DOWN;
         this.positionY++;
         this.tankImage = tankDown;
     }
 
     moveRight() {
+        this.direction = DIRECTION.RIGHT;
         this.positionX++;
         this.tankImage = tankRight;
     }
 
     moveLeft() {
+        this.direction = DIRECTION.LEFT;
         this.positionX--;
         this.tankImage = tankLeft;
     }
@@ -60,5 +85,10 @@ export class Player extends GameObject {
 
     getY() {
         return this.positionY;
+    }
+
+    fire() {
+        const bullet = new Bullet(this.game, this.direction, this.positionX, this.positionY);
+        this.game.addGameObject(bullet);
     }
 }

@@ -1,31 +1,24 @@
 import { GameObject } from "../core/game-object";
 import pn from '../util/perlin-noise';
 import { Player } from "./player";
+import { Game } from "../core/game";
+
+const brick = new Image();
+brick.src = './img/brick.jpg';
 
 export class Arena extends GameObject {
     private width: number = 100;
     private height: number = 100;
     private scaler = 0.1;
     private arena;
-    private boxSize = 25;
-    private brickImage;
-    private drawX;
-    private drawY;
 
     constructor(
-        ctx: CanvasRenderingContext2D,
+        game: Game,
         private player: Player
     ) {
-        super(ctx);
+        super(game);
 
         this.initializeArena();
-
-        const brick = new Image(this.boxSize, this.boxSize);
-        brick.src = './img/brick.jpg';
-        this.brickImage = brick;
-
-        this.drawX = 800 / this.boxSize;
-        this.drawY = 800 / this.boxSize;
     }
 
     private initializeArena() {
@@ -69,25 +62,20 @@ export class Arena extends GameObject {
     }
 
     private drawBrick(x, y) {
-        const boxSize = this.boxSize;
-        this.ctx.drawImage(this.brickImage, x * boxSize, y * boxSize, boxSize, boxSize);
+        this.game.drawImage(brick, x, y);
     }
 
     render() {
-        this.ctx.clearRect(0, 0, 1000, 1000);
-
-        const offsetX = this.player.getX();
-        const offsetY = this.player.getY();
-
-        for (let x = 0 + offsetX; x < this.drawX + offsetX; x++) {
-            for (let y = 0 + offsetY; y < this.drawY + offsetY; y++) {
+        for (let x = 0; x < this.game.gridSize; x++) {
+            for (let y = 0; y < this.game.gridSize; y++) {
                 // if out of area
                 if (this.arena[x] === undefined || this.arena[x][y] === undefined) {
-                    return;
+                    this.drawBrick(x, y);
+                    continue;
                 }
 
                 if (this.arena[x][y] === 0) {
-                    this.drawBrick(x - offsetX, y - offsetY);
+                    this.drawBrick(x, y);
                 }
             }
         }
