@@ -9,7 +9,7 @@ waterImage.src = './img/water.png';
  */
 export class Game {
     private gameObject: GameObject[] = [];
-    private framesPerSecond = 25;
+    private framesPerSecond = 100;
 
     private elementHeight = 0;
     private elementWidth = 0;
@@ -41,6 +41,12 @@ export class Game {
 
     // Update collision here maybe
     drawImage(image, x, y) {
+        // doesn't need to draw if out of view
+        if (x < this.cameraOffset.x1 || y < this.cameraOffset.y1
+            || x > this.cameraOffset.x2 || y > this.cameraOffset.y2) {
+            return;
+        }
+
         this.ctx.drawImage(
             image,
             x * this.boxSize - this.cameraOffset.x1 * this.boxSize,

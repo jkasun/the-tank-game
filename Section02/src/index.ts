@@ -8,7 +8,7 @@ const ctx: CanvasRenderingContext2D = c.getContext("2d");
 const tankGame = new Game(ctx, 100, 100);
 
 const player = new Player(tankGame);
-const arena = new Arena(tankGame, player);
+const arena = new Arena(tankGame);
 
 tankGame.addGameObject(arena);
 tankGame.addGameObject(player);
