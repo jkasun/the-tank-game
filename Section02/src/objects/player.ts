@@ -22,7 +22,7 @@ export class Player extends Tank {
         this.position.x = game.gridSize / 2;
         this.position.y = game.gridSize / 2;
 
-        // this.setCamera();
+        this.setCamera();
     }
 
     private setCamera() {

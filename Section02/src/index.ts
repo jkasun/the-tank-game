@@ -16,7 +16,7 @@ tankGame.addGameObject(player);
 
 tankGame.start();
 
-const numberOfTanks = 1;
+const numberOfTanks = 10;
 
 for (let i = 0; i < numberOfTanks; i++) {
     const enemyTank = new EnemyTank(tankGame, player);

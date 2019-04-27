@@ -11,7 +11,9 @@ waterImage.src = './img/material/water.png';
  */
 export class Game {
     private gameObject: GameObject[] = [];
+
     private framesPerSecond = 25;
+    private currentFrame = 0;
 
     private elementHeight = 0;
     private elementWidth = 0;
@@ -90,6 +92,12 @@ export class Game {
     }
 
     render() {
+        this.currentFrame++;
+
+        if (this.currentFrame === this.framesPerSecond) {
+            this.currentFrame = 0;
+        }
+
         this.cameraOffset = this.cameraFunction();
         this.collisionMap.clear();
         this.ctx.clearRect(0, 0, 1000, 1000);
@@ -131,6 +139,10 @@ export class Game {
 
     setCameraFunction(f: Function) {
         this.cameraFunction = f;
+    }
+
+    getCurrentFrame() {
+        return this.currentFrame;
     }
 
     get boxSize() {

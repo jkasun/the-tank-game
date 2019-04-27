@@ -21,6 +21,12 @@ waterImage.src = './img/material/water.png';
 export class EnemyTank extends Tank {
     private path = [];
 
+    // display path
+    private showPath = false;
+
+    private movingEvent;
+    private shouldCalculateRoute = false;
+
     constructor(game: Game, private player: Player) {
         super(game, tankUp, tankDown, tankLeft, tankRight);
         this.tankImage = tankRight;
@@ -36,17 +42,19 @@ export class EnemyTank extends Tank {
         this.position.x = x;
         this.position.y = y;
 
-        setTimeout(() => {
-            this.calculateRoute();
-        }, Math.random() * 1000);
+        setInterval(() => {
+            this.shouldCalculateRoute = true;
+        }, 1000);
     }
 
     render() {
-        for (let i of this.path) {
-            const x = i[0];
-            const y = i[1];
+        if (this.showPath) {
+            for (let i of this.path) {
+                const x = i[0];
+                const y = i[1];
 
-            this.game.drawImage(this, waterImage, x, y, false);
+                this.game.drawImage(this, waterImage, x, y, false);
+            }
         }
 
         this.game.drawImage(
@@ -60,6 +68,11 @@ export class EnemyTank extends Tank {
         for (let bullet of this.bullets) {
             bullet.render();
         }
+
+        if (this.shouldCalculateRoute) {
+            this.shouldCalculateRoute = false;
+            this.calculateRoute();
+        }
     }
 
     onCollision() {
@@ -67,6 +80,11 @@ export class EnemyTank extends Tank {
     }
 
     private calculateRoute() {
+        if (this.movingEvent) {
+            clearInterval(this.movingEvent);
+            this.movingEvent = null;
+        }
+
         this.path = this.game.getRoute(
             [this.position.x, this.position.y],
             [this.player.getX(), this.player.getY()]
@@ -74,7 +92,7 @@ export class EnemyTank extends Tank {
 
         let counter = 0;
 
-        setInterval(() => {
+        this.movingEvent = setInterval(() => {
             const currentBlock = this.path[counter];
 
             if (currentBlock) {
@@ -97,6 +115,6 @@ export class EnemyTank extends Tank {
             }
 
             counter++;
-        }, 500);
+        }, 200);
     }
 }

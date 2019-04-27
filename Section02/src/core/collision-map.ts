@@ -1,6 +1,6 @@
 import { GameObject } from "./game-object";
 import * as _ from 'lodash';
-import { findPath } from "../util/astar";
+import { findPath } from "../util/astar/astar";
 
 export class CollisionMap {
     private collisionMap: { value: number, gameObject: GameObject }[][] = [];

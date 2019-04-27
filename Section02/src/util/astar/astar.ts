@@ -1,32 +1,10 @@
-import { Pos } from "../core/position";
 import * as _ from 'lodash';
-
-class Node {
-    // calculated distance form the start node
-    f: number;
-    g: number;
-    h: number;
-
-    parent: Node;
-
-    constructor(public position: Pos) {
-    }
-
-    equals(node: Node): boolean {
-        return this.position.x == node.position.x
-            && this.position.y === node.position.y;
-    }
-
-    // heuristic value
-    setH(endNode: Node) {
-        this.h = Math.pow(this.position.x - endNode.position.x, 2)
-            + Math.pow(this.position.y - endNode.position.y, 2)
-    }
-}
+import { Node } from './node';
+import { ClosedList } from './closed-list';
 
 export const findPath = (matrix, start, goal): any => {
     const openList: Node[] = [];
-    const closedList: Node[] = [];
+    const closedList = new ClosedList();
 
     const width = matrix.length;
     const height = matrix[0].length;
@@ -47,6 +25,7 @@ export const findPath = (matrix, start, goal): any => {
     openList.push(startNode);
 
     while (openList.length > 0) {
+        // TODO optimize
         const q: Node = _.minBy(openList, 'f');
 
         const x = q.position.x;
@@ -75,6 +54,7 @@ export const findPath = (matrix, start, goal): any => {
         }
 
         for (let successor of successors) {
+            // Return path if successor is the goal node
             if (successor.equals(endNode)) {
                 console.log('We have found the last node');
 
@@ -94,6 +74,7 @@ export const findPath = (matrix, start, goal): any => {
             successor.setH(endNode);
             successor.f = successor.g + successor.h;
 
+            // TODO optimize
             let oldSuccessor: Node = _.find(openList, (node) => {
                 return successor.equals(node);
             });
@@ -102,9 +83,7 @@ export const findPath = (matrix, start, goal): any => {
                 continue;
             }
 
-            oldSuccessor = _.find(closedList, (node) => {
-                return successor.equals(node);
-            });
+            oldSuccessor = closedList.get(successor.position.x, successor.position.y);
 
             if (oldSuccessor && oldSuccessor.f < successor.f) {
                 continue;
@@ -113,8 +92,9 @@ export const findPath = (matrix, start, goal): any => {
             openList.push(successor);
         }
 
+        // TODO optimize
         _.remove(openList, q);
-        closedList.push(q);
+        closedList.add(q.position.x, q.position.y, q);
     }
 
     return [];
