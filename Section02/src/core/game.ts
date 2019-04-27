@@ -3,7 +3,7 @@ import { CollisionMap } from "./collision-map";
 import * as _ from 'lodash';
 
 const waterImage = new Image();
-waterImage.src = './img/water.png';
+waterImage.src = './img/material/water.png';
 
 /**
  * This class should abstract the canvas to a grid world
@@ -50,17 +50,20 @@ export class Game {
     }
 
     // Update collision here maybe
-    drawImage(gameObject: GameObject, image, x, y): boolean {
-        // checking for collision
-        if (this.collisionMap.getCollision(x, y).value) {
-            const collidingGameObject = this.collisionMap.getCollision(x, y).gameObject;
+    drawImage(gameObject: GameObject, image, x, y, isColliding?: boolean): boolean {
 
-            gameObject.onCollision(x, y, collidingGameObject); // caller collision
-            collidingGameObject.onCollision(x, y, gameObject);
-            return;
+        if (isColliding !== false) {
+            // checking for collision
+            if (this.collisionMap.getCollision(x, y).value) {
+                const collidingGameObject = this.collisionMap.getCollision(x, y).gameObject;
+
+                gameObject.onCollision(x, y, collidingGameObject); // caller collision
+                collidingGameObject.onCollision(x, y, gameObject);
+                return;
+            }
+
+            this.collisionMap.setCollision(x, y, 1, gameObject);
         }
-
-        this.collisionMap.setCollision(x, y, 1, gameObject);
 
         // doesn't need to draw if out of view
         if (x < this.cameraOffset.x1 || y < this.cameraOffset.y1
@@ -136,5 +139,9 @@ export class Game {
 
     get gridSize() {
         return this.width;
+    }
+
+    getRoute(startPos, goalPos) {
+        return this.collisionMap.getRoute(startPos, goalPos);
     }
 }

@@ -1,10 +1,12 @@
 import { GameObject } from "../core/game-object";
 import pn from '../util/perlin-noise';
-import { Player } from "./player";
 import { Game } from "../core/game";
 
 const brick = new Image();
-brick.src = './img/brick.jpg';
+brick.src = './img/material/brick.jpg';
+
+const iron = new Image();
+iron.src = './img/material/iron.jpg';
 
 export class Arena extends GameObject {
     private width: number = 100;
@@ -60,6 +62,10 @@ export class Arena extends GameObject {
         this.arena = arena;
     }
 
+    private drawIron(x, y) {
+        this.game.drawImage(this, iron, x, y);
+    }
+
     private drawBrick(x, y) {
         this.game.drawImage(this, brick, x, y);
     }
@@ -67,12 +73,13 @@ export class Arena extends GameObject {
     render() {
         for (let x = 0; x < this.game.gridSize; x++) {
             for (let y = 0; y < this.game.gridSize; y++) {
-                // if out of area
-                if (this.arena[x] === undefined || this.arena[x][y] === undefined) {
-                    this.drawBrick(x, y);
+                // Corner tiles, game area
+                if (x === 0 || y === 0 || x === this.width - 1 || y === this.height - 1) {
+                    this.drawIron(x, y);
                     continue;
                 }
 
+                // Normal Maze tiles
                 if (this.arena[x][y] === 0) {
                     this.drawBrick(x, y);
                 }
@@ -81,6 +88,11 @@ export class Arena extends GameObject {
     }
 
     onCollision(x, y) {
+        // does not destroy if corner tile
+        if (x === 0 || y === 0 || x === this.width - 1 || y === this.height - 1) {
+            return;
+        }
+
         this.arena[x][y] = 1;
     }
 }

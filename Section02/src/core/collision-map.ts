@@ -1,7 +1,10 @@
 import { GameObject } from "./game-object";
+import * as _ from 'lodash';
+import { findPath } from "../util/astar";
 
 export class CollisionMap {
     private collisionMap: { value: number, gameObject: GameObject }[][] = [];
+    private matrix: number[][] = [];
 
     constructor(
         private width: number,
@@ -19,6 +22,8 @@ export class CollisionMap {
             value,
             gameObject
         };
+
+        this.matrix[x][y] = 1;
     }
 
     getCollision(x, y) {
@@ -37,13 +42,30 @@ export class CollisionMap {
             for (let y = 0; y < this.height; y++) {
                 if (!this.collisionMap[x]) {
                     this.collisionMap[x] = [];
+                    this.matrix[x] = [];
                 }
 
                 this.collisionMap[x][y] = {
                     value: 0,
                     gameObject: null
                 };
+
+                this.matrix[x][y] = 0;
             }
         }
+    }
+
+    getRoute(start, goal) {
+        const x1 = start[0];
+        const y1 = start[1];
+
+        const x2 = goal[0];
+        const y2 = goal[1];
+
+        var prepMatrix = _.map(this.matrix, _.clone);
+        prepMatrix[x1][y1] = 0;
+        prepMatrix[x2][y2] = 0;
+
+        return findPath(prepMatrix, start, goal);
     }
 }
