@@ -53,8 +53,11 @@ export class Arena extends GameObject {
         }
 
         // clean up space for spawn
-        for (let x = 1; x < 5; x++) {
-            for (let y = 1; y < 5; y++) {
+        const middleX = Math.floor(this.width / 2);
+        const middleY = Math.floor(this.width / 2);
+
+        for (let x = middleX - 5; x < middleX + 5; x++) {
+            for (let y = middleY - 5; y < middleY + 5; y++) {
                 arena[x][y] = 1;
             }
         }
@@ -70,7 +73,7 @@ export class Arena extends GameObject {
         this.game.drawImage(this, brick, x, y);
     }
 
-    render() {
+    onRender() {
         for (let x = 0; x < this.game.gridSize; x++) {
             for (let y = 0; y < this.game.gridSize; y++) {
                 // Corner tiles, game area

@@ -27,27 +27,33 @@ export class EnemyTank extends Tank {
     private movingEvent;
     private shouldCalculateRoute = false;
 
+    private spawned = false;
+
     constructor(game: Game, private player: Player) {
         super(game, tankUp, tankDown, tankLeft, tankRight);
         this.tankImage = tankRight;
 
-        let x = 0;
-        let y = 0;
-
-        do {
-            x = Math.floor(Math.random() * 100);
-            y = Math.floor(Math.random() * 100);
-        } while (game.hasCollision(x, y));
-
-        this.position.x = x;
-        this.position.y = y;
-
         setInterval(() => {
             this.shouldCalculateRoute = true;
-        }, 1000);
+        }, 5000);
     }
 
-    render() {
+    onRender() {
+        if (!this.spawned) {
+            this.spawned = true;
+
+            let x = 0;
+            let y = 0;
+
+            do {
+                x = Math.floor(Math.random() * 100);
+                y = Math.floor(Math.random() * 100);
+            } while (this.game.hasCollision(x, y));
+
+            this.position.x = x;
+            this.position.y = y;
+        }
+
         if (this.showPath) {
             for (let i of this.path) {
                 const x = i[0];
@@ -66,7 +72,7 @@ export class EnemyTank extends Tank {
 
         // rendering bullets 
         for (let bullet of this.bullets) {
-            bullet.render();
+            bullet.onRender();
         }
 
         if (this.shouldCalculateRoute) {
@@ -83,6 +89,12 @@ export class EnemyTank extends Tank {
         if (this.movingEvent) {
             clearInterval(this.movingEvent);
             this.movingEvent = null;
+        }
+
+        const h = Math.sqrt(Math.pow(this.player.getX() - this.position.x, 2) + Math.pow(this.player.getY() - this.position.y, 2));
+
+        if (h > 20) {
+            return;
         }
 
         this.path = this.game.getRoute(
@@ -115,6 +127,6 @@ export class EnemyTank extends Tank {
             }
 
             counter++;
-        }, 200);
+        }, 500);
     }
 }

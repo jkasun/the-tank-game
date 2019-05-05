@@ -70,7 +70,7 @@ export class Bullet extends GameObject {
         this.game.removeGameObject(this);
     }
 
-    render() {
+    onRender() {
         this.game.drawImage(
             this,
             this.bulletImage,

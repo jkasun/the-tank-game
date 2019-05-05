@@ -2,17 +2,19 @@ import { Bullet } from "./bullet";
 import { Game } from "../core/game";
 import { Tank } from "./tank";
 
+const tankType = 'tank-hulk';
+
 const tankUp = new Image();
-tankUp.src = './img/tank/tank-up.png';
+tankUp.src = `./img/${tankType}/tank-up.png`;
 
 const tankDown = new Image();
-tankDown.src = './img/tank/tank-down.png';
+tankDown.src = `./img/${tankType}/tank-down.png`;
 
 const tankRight = new Image();
-tankRight.src = './img/tank/tank-right.png';
+tankRight.src = `./img/${tankType}/tank-right.png`;
 
 const tankLeft = new Image();
-tankLeft.src = './img/tank/tank-left.png';
+tankLeft.src = `./img/${tankType}/tank-left.png`;
 
 export class Player extends Tank {
     constructor(game: Game) {
@@ -38,7 +40,7 @@ export class Player extends Tank {
         });
     }
 
-    render() {
+    onRender() {
         this.game.drawImage(
             this,
             this.tankImage,
@@ -48,7 +50,7 @@ export class Player extends Tank {
 
         // rendering bullets 
         for (let bullet of this.bullets) {
-            bullet.render();
+            bullet.onRender();
         }
     }
 

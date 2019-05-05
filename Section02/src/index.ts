@@ -14,14 +14,16 @@ const arena = new Arena(tankGame);
 tankGame.addGameObject(arena);
 tankGame.addGameObject(player);
 
-tankGame.start();
-
 const numberOfTanks = 10;
 
 for (let i = 0; i < numberOfTanks; i++) {
     const enemyTank = new EnemyTank(tankGame, player);
     tankGame.addGameObject(enemyTank);
 }
+
+setTimeout(() => {
+    tankGame.start();
+}, 100);
 
 document.onkeyup = (event) => {
     if (event.key === 'w') {
