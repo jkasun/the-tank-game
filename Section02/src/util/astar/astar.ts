@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 import { Node } from './node';
 import { ClosedList } from './closed-list';
+import { OpenList } from './open-list';
 
 export const findPath = (matrix, start, goal): any => {
-    const openList: Node[] = [];
+    const openList = new OpenList();
     const closedList = new ClosedList();
 
     const width = matrix.length;
@@ -22,11 +23,10 @@ export const findPath = (matrix, start, goal): any => {
         y: goal[1]
     });
 
-    openList.push(startNode);
+    openList.add(startNode);
 
-    while (openList.length > 0) {
-        // TODO optimize
-        const q: Node = _.minBy(openList, 'f');
+    while (!openList.isEmpty()) {
+        const q: Node = openList.getMin();
 
         const x = q.position.x;
         const y = q.position.y;
@@ -74,10 +74,7 @@ export const findPath = (matrix, start, goal): any => {
             successor.setH(endNode);
             successor.f = successor.g + successor.h;
 
-            // TODO optimize
-            let oldSuccessor: Node = _.find(openList, (node) => {
-                return successor.equals(node);
-            });
+            let oldSuccessor: Node = openList.get(successor.position.x, successor.position.y);
 
             if (oldSuccessor && oldSuccessor.f < successor.f) {
                 continue;
@@ -89,11 +86,10 @@ export const findPath = (matrix, start, goal): any => {
                 continue;
             }
 
-            openList.push(successor);
+            openList.add(successor);
         }
 
-        // TODO optimize
-        _.remove(openList, q);
+        openList.remove(q);
         closedList.add(q.position.x, q.position.y, q);
     }
 
