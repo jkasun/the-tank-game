@@ -11,9 +11,25 @@ export abstract class GameObject {
 
     }
 
-    abstract render();
-    
-    onCollision(x, y, gameObject: GameObject) {
+    // drawing game object should implement here
+    beforeRender() {
+    }
 
+    abstract onRender();
+
+    afterRender() {
+    }
+
+    beforeInit() {
+    }
+
+    // on init
+    onInit() {
+    }
+
+    afterInit() {
+    }
+
+    onCollision(x, y, gameObject: GameObject) {
     }
 }

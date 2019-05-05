@@ -10,7 +10,7 @@ waterImage.src = './img/material/water.png';
  * game architecture
  */
 export class Game {
-    private gameObject: GameObject[] = [];
+    private gameObjects: GameObject[] = [];
 
     private framesPerSecond = 25;
     private currentFrame = 0;
@@ -84,11 +84,25 @@ export class Game {
     }
 
     addGameObject(gameObject: GameObject) {
-        this.gameObject.push(gameObject);
+        this.gameObjects.push(gameObject);
     }
 
     removeGameObject(gameObject: GameObject) {
-        _.remove(this.gameObject, gameObject);
+        _.remove(this.gameObjects, gameObject);
+    }
+
+    initializeGameObjects() {
+        for (let object of this.gameObjects) {
+            object.beforeInit();
+        }
+
+        for (let object of this.gameObjects) {
+            object.onInit();
+        }
+
+        for (let object of this.gameObjects) {
+            object.afterInit();
+        }
     }
 
     render() {
@@ -104,8 +118,16 @@ export class Game {
 
         this.renderNonGameArea();
 
-        for (let object of this.gameObject) {
-            object.render();
+        for (let object of this.gameObjects) {
+            object.beforeRender();
+        }
+
+        for (let object of this.gameObjects) {
+            object.onRender();
+        }
+
+        for (let object of this.gameObjects) {
+            object.afterRender();
         }
     }
 
@@ -124,6 +146,8 @@ export class Game {
     }
 
     start() {
+        this.initializeGameObjects();
+
         setInterval(() => {
             this.render();
         }, 1000 / this.framesPerSecond);
