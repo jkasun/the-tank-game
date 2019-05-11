@@ -2,7 +2,7 @@ import { Bullet } from "./bullet";
 import { Game } from "../core/game";
 import { Tank } from "./tank";
 
-const tankType = 'tank-hulk';
+const tankType = 'tank';
 
 const tankUp = new Image();
 tankUp.src = `./img/${tankType}/tank-up.png`;
@@ -47,11 +47,6 @@ export class Player extends Tank {
             this.position.x,
             this.position.y,
         );
-
-        // rendering bullets 
-        for (let bullet of this.bullets) {
-            bullet.onRender();
-        }
     }
 
     getX() {
@@ -63,7 +58,7 @@ export class Player extends Tank {
     }
 
     fire() {
-        const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y);
+        const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y, this);
         this.game.addGameObject(bullet);
     }
 }

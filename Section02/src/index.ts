@@ -21,6 +21,14 @@ for (let i = 0; i < numberOfTanks; i++) {
     tankGame.addGameObject(enemyTank);
 }
 
+const numberOfCloners = 4;
+
+for (let i = 0; i < numberOfCloners; i++) {
+    const enemyTank = new EnemyTank(tankGame, player);
+    tankGame.addGameObject(enemyTank);
+}
+
+
 setTimeout(() => {
     tankGame.start();
 }, 100);

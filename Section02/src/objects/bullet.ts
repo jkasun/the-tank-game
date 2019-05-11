@@ -1,7 +1,6 @@
 import { GameObject } from "../core/game-object";
 import { DIRECTION } from "../core/direction";
 import { Game } from "../core/game";
-import { Player } from "./player";
 
 const bulletRight = new Image();
 bulletRight.src = './img/bullet/bullet-right.png';
@@ -19,7 +18,13 @@ export class Bullet extends GameObject {
     private velocity: number = 15; // grids per second
     private bulletImage;
 
-    constructor(game: Game, private direction: DIRECTION, private x: number, private y: number) {
+    constructor(
+        game: Game,
+        private direction: DIRECTION,
+        private x: number,
+        private y: number,
+        private owner: GameObject
+    ) {
         super(game);
 
         switch (this.direction) {
@@ -61,11 +66,14 @@ export class Bullet extends GameObject {
         }, 1000 / this.velocity);
     }
 
+    getOwner() {
+        return this.owner;
+    }
+
     onCollision(x, y, gameObject) {
-        if (gameObject instanceof Player) {
+        if (gameObject === this.owner) {
             return;
         }
-
 
         this.game.removeGameObject(this);
     }
