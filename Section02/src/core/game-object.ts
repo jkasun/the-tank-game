@@ -7,8 +7,18 @@ GameObject should only handle visual rendering (do not handle
 things like collision here)
 */
 export abstract class GameObject {
+    private events: any[] = [];
+
     constructor(public game: Game) {
 
+    }
+
+    addEvent(event) {
+        this.events.push(event);
+    }
+
+    getEvents() {
+        return this.events;
     }
 
     // drawing game object should implement here

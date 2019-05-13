@@ -5,22 +5,24 @@ import * as _ from 'lodash';
 import { DIRECTION } from "../core/direction";
 import { Bullet } from "./bullet";
 
+const tankType = 'tank-car';
+
 const tankUp = new Image();
-tankUp.src = './img/enemy-tank/tank-up.png';
+tankUp.src = `./img/${tankType}/up.png`;
 
 const tankDown = new Image();
-tankDown.src = './img/enemy-tank/tank-down.png';
+tankDown.src = `./img/${tankType}/down.png`;
 
 const tankRight = new Image();
-tankRight.src = './img/enemy-tank/tank-right.png';
+tankRight.src = `./img/${tankType}/right.png`;
 
 const tankLeft = new Image();
-tankLeft.src = './img/enemy-tank/tank-left.png';
+tankLeft.src = `./img/${tankType}/left.png`;
 
 const waterImage = new Image();
 waterImage.src = './img/material/water.png';
 
-export class EnemyTank extends Tank {
+export class ClonerChild extends Tank {
     private path = [];
 
     // display path
@@ -29,17 +31,14 @@ export class EnemyTank extends Tank {
     private movingEvent;
     private shouldCalculateRoute = false;
 
-    private spawned = false;
     private isReloading = false;
 
-    private healthPoints = 3;
-    public state: string;
-
-    constructor(game: Game, private player: Player) {
+    constructor(game: Game, private player: Player, x: number, y: number) {
         super(game, tankUp, tankDown, tankLeft, tankRight);
-
-        this.state = 'IDLE';
         this.tankImage = tankRight;
+        
+        this.position.x = x;
+        this.position.y = y;
 
         setInterval(() => {
             this.shouldCalculateRoute = true;
@@ -47,31 +46,8 @@ export class EnemyTank extends Tank {
     }
 
     onRender() {
-        if (!this.spawned) {
-            this.calculateSpawnPosition();
-        }
-
         if (this.showPath) {
             this.drawPath();
-        }
-
-        const h = Math.sqrt(Math.pow(this.player.getX() - this.position.x, 2) + Math.pow(this.player.getY() - this.position.y, 2));
-
-        if (h > 20) {
-            this.state = 'IDLE';
-            return;
-        }
-
-        if (this.isAttackPossible() && h < 10) {
-            this.stopRouting();
-            this.fire();
-            this.state = 'ATTACK';
-        } else {
-            if (this.shouldCalculateRoute) {
-                this.shouldCalculateRoute = false;
-                this.calculateRoute();
-                this.state = 'CHASE';
-            }
         }
 
         this.game.drawImage(
@@ -80,21 +56,13 @@ export class EnemyTank extends Tank {
             this.position.x,
             this.position.y
         );
-    }
 
-    private calculateSpawnPosition() {
-        this.spawned = true;
+        if (this.shouldCalculateRoute) {
+            this.shouldCalculateRoute = false;
+            this.calculateRoute();
+        }
 
-        let x = 0;
-        let y = 0;
-
-        do {
-            x = Math.floor(Math.random() * 100);
-            y = Math.floor(Math.random() * 100);
-        } while (this.game.hasCollision(x, y));
-
-        this.position.x = x;
-        this.position.y = y;
+        this.isAttackPossible();
     }
 
     private drawPath() {
@@ -113,17 +81,19 @@ export class EnemyTank extends Tank {
             }
         }
 
-        this.healthPoints--;
-
-        if (this.healthPoints === 0) {
-            this.onDie();
-            this.state = 'DEAD';
-        }
+        this.game.removeGameObject(this);
     }
 
     private calculateRoute() {
         if (this.movingEvent) {
-            this.stopRouting();
+            clearInterval(this.movingEvent);
+            this.movingEvent = null;
+        }
+
+        const h = Math.sqrt(Math.pow(this.player.getX() - this.position.x, 2) + Math.pow(this.player.getY() - this.position.y, 2));
+
+        if (h > 20) {
+            return;
         }
 
         this.path = this.game.getRoute(
@@ -159,12 +129,13 @@ export class EnemyTank extends Tank {
         }, 500);
     }
 
-    private stopRouting() {
-        clearInterval(this.movingEvent);
-        this.movingEvent = null;
-    }
+    private isAttackPossible() {
+        const h = Math.sqrt(Math.pow(this.player.getX() - this.position.x, 2) + Math.pow(this.player.getY() - this.position.y, 2));
 
-    private isAttackPossible(): boolean {
+        if (h > 15) {
+            return;
+        }
+
         const px = this.player.getX();
         const py = this.player.getY();
 
@@ -180,7 +151,7 @@ export class EnemyTank extends Tank {
                 this.direction = DIRECTION.LEFT;
             }
 
-            return true;
+            this.fire();
         }
 
         if (x === px) {
@@ -192,10 +163,8 @@ export class EnemyTank extends Tank {
                 this.direction = DIRECTION.UP;
             }
 
-            return true;
+            this.fire();
         }
-
-        return false;
     }
 
     fire() {
@@ -211,13 +180,5 @@ export class EnemyTank extends Tank {
         setTimeout(() => {
             this.isReloading = false;
         }, 750);
-    }
-
-    getHealthPoints() {
-        return this.healthPoints;
-    }
-
-    private onDie() {
-        this.game.removeGameObject(this);
     }
 }

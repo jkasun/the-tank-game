@@ -1,0 +1,38 @@
+canvas {
+    border: 1px solid black;
+    background: white;
+}
+
+body {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.center {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    width: 1000px;
+}
+
+.game-info {
+    background: black;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    font-size: 10px;
+}
+
+tr,
+td,
+th {
+    border: 2px solid white;
+}

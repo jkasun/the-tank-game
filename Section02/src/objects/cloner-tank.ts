@@ -4,23 +4,26 @@ import { Player } from "./player";
 import * as _ from 'lodash';
 import { DIRECTION } from "../core/direction";
 import { Bullet } from "./bullet";
+import { ClonerChild } from "./cloner-child";
+
+const tankType = 'tank-hulk';
 
 const tankUp = new Image();
-tankUp.src = './img/enemy-tank/tank-up.png';
+tankUp.src = `./img/${tankType}/up.png`;
 
 const tankDown = new Image();
-tankDown.src = './img/enemy-tank/tank-down.png';
+tankDown.src = `./img/${tankType}/down.png`;
 
 const tankRight = new Image();
-tankRight.src = './img/enemy-tank/tank-right.png';
+tankRight.src = `./img/${tankType}/right.png`;
 
 const tankLeft = new Image();
-tankLeft.src = './img/enemy-tank/tank-left.png';
+tankLeft.src = `./img/${tankType}/left.png`;
 
 const waterImage = new Image();
 waterImage.src = './img/material/water.png';
 
-export class EnemyTank extends Tank {
+export class ClonerTank extends Tank {
     private path = [];
 
     // display path
@@ -44,6 +47,10 @@ export class EnemyTank extends Tank {
         setInterval(() => {
             this.shouldCalculateRoute = true;
         }, 2500);
+
+        setInterval(() => {
+            this.clone();
+        }, 10000);
     }
 
     onRender() {
@@ -117,7 +124,6 @@ export class EnemyTank extends Tank {
 
         if (this.healthPoints === 0) {
             this.onDie();
-            this.state = 'DEAD';
         }
     }
 
@@ -211,6 +217,17 @@ export class EnemyTank extends Tank {
         setTimeout(() => {
             this.isReloading = false;
         }, 750);
+    }
+
+    private clone() {
+        const h = Math.sqrt(Math.pow(this.player.getX() - this.position.x, 2) + Math.pow(this.player.getY() - this.position.y, 2));
+
+        if (h > 10) {
+            return;
+        }
+
+        const clone = new ClonerChild(this.game, this.player, this.position.x + 1, this.position.y);
+        this.game.addGameObject(clone);
     }
 
     getHealthPoints() {

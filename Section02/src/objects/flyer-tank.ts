@@ -5,22 +5,24 @@ import * as _ from 'lodash';
 import { DIRECTION } from "../core/direction";
 import { Bullet } from "./bullet";
 
+const tankType = 'tank-fly';
+
 const tankUp = new Image();
-tankUp.src = './img/enemy-tank/tank-up.png';
+tankUp.src = `./img/${tankType}/up.png`;
 
 const tankDown = new Image();
-tankDown.src = './img/enemy-tank/tank-down.png';
+tankDown.src = `./img/${tankType}/down.png`;
 
 const tankRight = new Image();
-tankRight.src = './img/enemy-tank/tank-right.png';
+tankRight.src = `./img/${tankType}/right.png`;
 
 const tankLeft = new Image();
-tankLeft.src = './img/enemy-tank/tank-left.png';
+tankLeft.src = `./img/${tankType}/left.png`;
 
 const waterImage = new Image();
 waterImage.src = './img/material/water.png';
 
-export class EnemyTank extends Tank {
+export class FlyTank extends Tank {
     private path = [];
 
     // display path
@@ -156,7 +158,7 @@ export class EnemyTank extends Tank {
             }
 
             counter++;
-        }, 500);
+        }, 250);
     }
 
     private stopRouting() {
@@ -210,7 +212,7 @@ export class EnemyTank extends Tank {
 
         setTimeout(() => {
             this.isReloading = false;
-        }, 750);
+        }, 500);
     }
 
     getHealthPoints() {

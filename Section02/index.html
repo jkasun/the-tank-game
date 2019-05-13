@@ -1,20 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Tank Game</title>
 
-    <style>
-        canvas {
-            border: 1px solid black;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <canvas id="canvas" height="600" width="600"></canvas>
+    <div class="wrapper center">
+        <canvas id="canvas" height="600" width="600"></canvas>
+
+        <div class="game-info">
+            <div class="card">
+                <div>
+                    <i class="fas fa-heart"></i> <span id="player-health"></span>
+
+                    <hr>
+
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Agent Id</th>
+                                    <th>Health Points</th>
+                                    <th>State</th>
+                                </tr>
+                            </thead>
+                            <tbody id='agent-info'>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./dist/main.min.js"></script>
 </body>
+
 </html>
