@@ -167,18 +167,20 @@ export class ClonerChild extends Tank {
         }
     }
 
-    fire() {
+    private fire() {
+        // probability integration for the attack - The attack will occur in between 600ms - 1100ms
+        const nextBulletIn = 600 + Math.floor(Math.random() * 500)
+
         if (this.isReloading) {
             return;
         }
 
-        const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y, this);
-        this.game.addGameObject(bullet);
-
         this.isReloading = true;
 
         setTimeout(() => {
+            const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y, this);
+            this.game.addGameObject(bullet);
             this.isReloading = false;
-        }, 750);
+        }, nextBulletIn);
     }
 }

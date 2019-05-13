@@ -201,18 +201,20 @@ export class FlyTank extends Tank {
     }
 
     fire() {
+        // probability integration for the attack - The attack will occur in between 200ms - 500ms
+        const nextBulletIn = 200 + Math.floor(Math.random() * 300)
+
         if (this.isReloading) {
             return;
         }
 
-        const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y, this);
-        this.game.addGameObject(bullet);
-
         this.isReloading = true;
 
         setTimeout(() => {
+            const bullet = new Bullet(this.game, this.direction, this.position.x, this.position.y, this);
+            this.game.addGameObject(bullet);
             this.isReloading = false;
-        }, 500);
+        }, nextBulletIn);
     }
 
     getHealthPoints() {
