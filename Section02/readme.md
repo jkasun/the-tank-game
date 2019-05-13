@@ -18,4 +18,4 @@ Then start the webpack live compilation
 
 `npm run watch`
 
-Then open up `index.html` in any browser which supports ES6 syntax and enjoy.
+Then open up `index.html` in any browser which supports ES6 syntax.
