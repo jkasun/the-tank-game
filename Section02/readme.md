@@ -1,6 +1,6 @@
 # Tank Game
 
-# Language and Framework
+## Language and Framework
 
 This game is written in TypeScript, and using webpack to build the code.
 
@@ -19,3 +19,8 @@ Then start the webpack live compilation
 `npm run watch`
 
 Then open up `index.html` in any browser which supports ES6 syntax.
+
+## Game Controls
+
+Use WASD keys to move in the terrain
+Use L key to fire
