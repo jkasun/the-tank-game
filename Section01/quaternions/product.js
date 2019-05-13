@@ -2,7 +2,7 @@ class Quternions {
     constructor(r, i, j, k) {
         this.r = r;
         this.i = i;
-        this.j = j;manag
+        this.j = j;
         this.k = k;
     }
 
