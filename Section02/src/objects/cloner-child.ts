@@ -40,7 +40,7 @@ export class ClonerChild extends Tank {
         this.position.x = x;
         this.position.y = y;
 
-        setInterval(() => {
+        this.addEvent(() => {
             this.shouldCalculateRoute = true;
         }, 2500);
     }
@@ -103,7 +103,7 @@ export class ClonerChild extends Tank {
 
         let counter = 0;
 
-        this.movingEvent = setInterval(() => {
+        this.movingEvent = this.addEvent(() => {
             const currentBlock = this.path[counter];
 
             if (currentBlock) {

@@ -44,11 +44,11 @@ export class ClonerTank extends Tank {
         this.state = 'IDLE';
         this.tankImage = tankRight;
 
-        setInterval(() => {
+        this.addEvent(() => {
             this.shouldCalculateRoute = true;
         }, 2500);
 
-        setInterval(() => {
+        this.addEvent(() => {
             this.clone();
         }, 5000 + Math.floor(Math.random() * 10000));
     }
@@ -139,7 +139,7 @@ export class ClonerTank extends Tank {
 
         let counter = 0;
 
-        this.movingEvent = setInterval(() => {
+        this.movingEvent = this.addEvent(() => {
             const currentBlock = this.path[counter];
 
             if (currentBlock) {

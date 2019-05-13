@@ -43,7 +43,7 @@ export class FlyTank extends Tank {
         this.state = 'IDLE';
         this.tankImage = tankRight;
 
-        setInterval(() => {
+        this.addEvent(() => {
             this.shouldCalculateRoute = true;
         }, 2500);
     }
@@ -135,7 +135,7 @@ export class FlyTank extends Tank {
 
         let counter = 0;
 
-        this.movingEvent = setInterval(() => {
+        this.movingEvent = this.addEvent(() => {
             const currentBlock = this.path[counter];
 
             if (currentBlock) {

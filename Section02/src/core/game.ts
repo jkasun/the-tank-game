@@ -88,6 +88,7 @@ export class Game {
     }
 
     removeGameObject(gameObject: GameObject) {
+        gameObject.stopEvents();
         _.remove(this.gameObjects, gameObject);
     }
 

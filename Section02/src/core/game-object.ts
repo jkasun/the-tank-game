@@ -13,12 +13,23 @@ export abstract class GameObject {
 
     }
 
-    addEvent(event) {
-        this.events.push(event);
+    addEvent(event: Function, timeout: number) {
+        let e = setInterval(() => {
+            if (event) {
+                event();
+            }
+        }, timeout);
+
+        this.events.push(e);
+        return e;
     }
 
-    getEvents() {
-        return this.events;
+    stopEvents() {
+        for(let e of this.events) {
+            if (e) {
+                clearInterval(e);
+            }
+        }
     }
 
     // drawing game object should implement here

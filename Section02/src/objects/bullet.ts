@@ -45,7 +45,7 @@ export class Bullet extends GameObject {
                 break;
         }
 
-        setInterval(() => {
+        this.addEvent(() => {
             switch (this.direction) {
                 case DIRECTION.UP:
                     this.moveUp();
