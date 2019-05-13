@@ -50,7 +50,7 @@ export class ClonerTank extends Tank {
 
         setInterval(() => {
             this.clone();
-        }, 10000);
+        }, 5000 + Math.floor(Math.random() * 10000));
     }
 
     onRender() {
